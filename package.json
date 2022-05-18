@@ -11,5 +11,8 @@
     "url": "git+https://github.com/sanji11/fragments-ui.git"
   },
   "author": "Sanjida Afrin <safrin2@myseneca.ca>",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "parcel": "^2.5.0"
+  }
 }
