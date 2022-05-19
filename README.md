@@ -1,2 +1,2 @@
 # fragments-ui
- A simple web client
+ Fragments UI testing web app
