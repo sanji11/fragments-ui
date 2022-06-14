@@ -32,9 +32,8 @@ async function init() {
   }
   submitBtn.onclick = async ()=>{
     console.log('Submit button clicked');
-    console.log(user);
     console.log(textInput.value);
-    await postUserFragment(user,textInput.value)
+    await postUserFragment(user,textInput.value, 'text/plain')
   }
   // Log the user info for debugging purposes
   console.log({ user });
