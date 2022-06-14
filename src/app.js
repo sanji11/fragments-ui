@@ -1,7 +1,7 @@
 // src/app.js
 
 import { Auth, getUser } from './auth';
-import { getUserFragments, postUserFragment } from './api';
+import { getUserFragments, postUserFragment, getFragmentByID } from './api';
 
 async function init() {
   // Get our UI elements
@@ -10,6 +10,8 @@ async function init() {
   const logoutBtn = document.querySelector('#logout');
   const submitBtn = document.querySelector('#submit');
   const textInput = document.getElementById('fragmentData');
+  const getByIDBtn = document.querySelector('#GetFragmentByID');
+  const idInput = document.getElementById('fragmentID');
 
   // Wire up event handlers to deal with login and logout.
   loginBtn.onclick = () => {
@@ -34,6 +36,12 @@ async function init() {
     console.log('Submit button clicked');
     console.log(textInput.value);
     await postUserFragment(user,textInput.value, 'text/plain')
+  }
+
+  getByIDBtn.onclick = async ()=>{
+    console.log('Get fragment by id button clicked');
+    console.log(idInput.value);
+    await getFragmentByID(user, idInput.value)
   }
   // Log the user info for debugging purposes
   console.log({ user });
