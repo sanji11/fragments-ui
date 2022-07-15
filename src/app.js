@@ -12,6 +12,7 @@ async function init() {
   const textInput = document.getElementById('fragmentData');
   const getByIDBtn = document.querySelector('#GetFragmentByID');
   const idInput = document.getElementById('fragmentID');
+  const selectedType = document.getElementById('fragmentType')
 
   // Wire up event handlers to deal with login and logout.
   loginBtn.onclick = () => {
@@ -35,7 +36,8 @@ async function init() {
   submitBtn.onclick = async ()=>{
     console.log('Submit button clicked');
     console.log(textInput.value);
-    await postUserFragment(user,textInput.value, 'text/plain')
+    console.log(selectedType.value);
+    await postUserFragment(user,JSON.stringify(textInput.value), selectedType.value);
   }
 
   getByIDBtn.onclick = async ()=>{
