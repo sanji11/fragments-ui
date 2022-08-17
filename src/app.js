@@ -1,18 +1,24 @@
 // src/app.js
 
 import { Auth, getUser } from './auth';
-import { getUserFragments, postUserFragment, getFragmentByID } from './api';
+import { getUserFragments, postUserFragment, updateUserFragment ,getFragmentByID, deleteFragmentByID } from './api';
 
 async function init() {
   // Get our UI elements
   const userSection = document.querySelector('#user');
   const loginBtn = document.querySelector('#login');
   const logoutBtn = document.querySelector('#logout');
-  const submitBtn = document.querySelector('#submit');
+  const createFragmentBtn = document.querySelector('#createFragment');
   const textInput = document.getElementById('fragmentData');
-  const getByIDBtn = document.querySelector('#GetFragmentByID');
+  const getByIDBtn = document.querySelector('#getFragmentByID');
   const idInput = document.getElementById('fragmentID');
   const selectedType = document.getElementById('fragmentType')
+  const input = document.getElementById('image');
+  const displayFragmentData = document.getElementById('displayFragmentData');
+  const updateFragmentIDInput = document.getElementById('updateFragmentID');
+  const updateFragmentBtn = document.querySelector('#updateFragment');
+  const deleteFragmentByIDBtn = document.querySelector('#deleteFragmentByID');
+  
 
   // Wire up event handlers to deal with login and logout.
   loginBtn.onclick = () => {
@@ -33,18 +39,48 @@ async function init() {
     logoutBtn.disabled = true;
     return;
   }
-  submitBtn.onclick = async ()=>{
-    console.log('Submit button clicked');
+  createFragmentBtn.onclick = async ()=>{
+    console.log('Create button clicked');
     console.log(textInput.value);
     console.log(selectedType.value);
-    await postUserFragment(user,JSON.stringify(textInput.value), selectedType.value);
+    if(selectedType.value.startsWith('image/')){
+      await postUserFragment(user, input.files[0], selectedType.value);
+    }else{
+      await postUserFragment(user,JSON.stringify(textInput.value), selectedType.value);
+    }
+  }
+
+  updateFragmentBtn.onclick = async ()=>{
+    console.log('Update button clicked');
+    console.log(textInput.value);
+    console.log(updateFragmentIDInput.value);
+    console.log(selectedType.value);
+    if(selectedType.value.startsWith('image/')){
+      await updateUserFragment(user, updateFragmentIDInput.value, input.files[0], selectedType.value);
+    }else{
+      await updateUserFragment(user, updateFragmentIDInput.value, JSON.stringify(textInput.value), selectedType.value);
+    }
   }
 
   getByIDBtn.onclick = async ()=>{
     console.log('Get fragment by id button clicked');
     console.log(idInput.value);
-    await getFragmentByID(user, idInput.value)
+    const result = await getFragmentByID(user, idInput.value);
+    console.log(result)
+    if(result.type.startsWith('image/')){
+      displayFragmentData.innerHTML = `<img src="data:${result.type};base64,${result.data}" />` 
+    }else{
+      displayFragmentData.innerHTML = `<pre>${result.data}</pre>`
+    }  
   }
+
+  deleteFragmentByIDBtn.onclick = async ()=>{
+    console.log('Delete fragment by id button clicked');
+    console.log(idInput.value);
+    await deleteFragmentByID(user, idInput.value);
+  }
+
+
   // Log the user info for debugging purposes
   console.log({ user });
  
@@ -61,6 +97,13 @@ async function init() {
   await getUserFragments(user);
 
 }
+
+// Event handler executed when a file is selected
+// const onSelectFile = () => upload(input.files[0]);
+
+// Add a listener on your input
+// It will be triggered when a file will be selected
+// input.addEventListener('change', onSelectFile, false);
 
 // Wait for the DOM to be ready, then start the app
 addEventListener('DOMContentLoaded', init);
